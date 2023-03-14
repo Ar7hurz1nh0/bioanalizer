@@ -24,7 +24,7 @@
     "build": "pnpm build:vite && pnpm build:electron",
     "build:vite": "vite build",
     "build:electron": "tsc -p electron",
-    "dist": "pnpm build && electron-builder",
+    "dist": "pnpm build && electron-builder --win --linux",
     "pack": "pnpm build && electron-builder --dir",
     "clean": "rimraf dist main src/out",
     "type-check": "tsc",

@@ -10,9 +10,10 @@ const enum Phenotype {
 }
 
 type bilocus = [boolean, boolean];
-type mortaldef = false | Phenotype | Phenotype[];
+type mortaldef = false | [Phenotype, Phenotype];
+type GeneCross = Gene[][];
 
-interface GeneCross {
+interface GeneCrossTableEdge {
   from: Genotype[];
   bilocus: [boolean[][], boolean[][]];
 }
@@ -65,7 +66,9 @@ class Subject implements Readonly<SubjectInit> {
 }
 
 class Cross {
+  readonly geneCrossTableEdge: GeneCrossTableEdge;
   readonly geneCross: GeneCross;
+
   constructor(
     public readonly subject1: Subject,
     public readonly subject2: Subject
@@ -74,7 +77,7 @@ class Cross {
     let genotype2: boolean[][] = subject2.genes.map((gene) => gene.bilocus);
   
     genotype1 = genotype1.reduce((acc, curr) => {
-      const [a, b] = curr as [boolean, boolean];
+      const [a, b] = curr as bilocus;
       const newAcc: boolean[][] = [];
       acc.forEach((el) => {
         newAcc.push([...el, a]);
@@ -84,7 +87,7 @@ class Cross {
     }, [[]] as boolean[][]);
   
     genotype2 = genotype2.reduce((acc, curr) => {
-      const [a, b] = curr as [boolean, boolean];
+      const [a, b] = curr as bilocus;
       const newAcc: boolean[][] = [];
       acc.forEach((el) => {
         newAcc.push([...el, a]);
@@ -93,64 +96,54 @@ class Cross {
       return newAcc;
     }, [[]] as boolean[][]);
     
-    this.geneCross = {
+    this.geneCrossTableEdge = {
       from: sub1.genes.map(x => x.from),
       bilocus: [genotype1, genotype2]
     }
+
+    this.geneCross = genotype1.map((genotype1, index) => {
+      return genotype1.map((locus, index2) => {
+        return {
+          from: this.geneCrossTableEdge.from[index2],
+          bilocus: [locus, genotype2[index][index2]]
+        };
+      });
+    }, []);
   }
 
-  get parsedGeneCross(): string[][] {
-    return this.geneCross.bilocus.map((genotype) => {
+  get parsedGeneCrossTableEdge(): string[][] {
+    return this.geneCrossTableEdge.bilocus.map((genotype) => {
       return genotype.map((bilocus) => {
         return bilocus.map((locus, index) => {
-          return locus ? this.geneCross.from[index]!.alias.toUpperCase() : this.geneCross.from[index]!.alias.toLowerCase();
+          return locus ? this.geneCrossTableEdge.from[index]!.alias.toUpperCase() : this.geneCrossTableEdge.from[index]!.alias.toLowerCase();
         }).join('');
       });
     });
   }
-}
 
-function cross(sub1: Subject, sub2: Subject): GeneCross {
-  let genotype1: boolean[][] = sub1.genes.map((gene) => gene.bilocus);
-  let genotype2: boolean[][] = sub2.genes.map((gene) => gene.bilocus);
-
-  genotype1 = genotype1.reduce((acc, curr) => {
-    const [a, b] = curr as [boolean, boolean];
-    const newAcc: boolean[][] = [];
-    acc.forEach((el) => {
-      newAcc.push([...el, a]);
-      newAcc.push([...el, b]);
+  // TODO: this function is only returning the first line of the table, thus the error
+  get parsedGeneCross(): string[][] {
+    return this.geneCross.map((genotype) => {
+      return genotype.map((bilocus) => {
+        return bilocus.bilocus.map((locus) => {
+          return locus ? bilocus.from.alias.toUpperCase() : bilocus.from.alias.toLowerCase();
+        }).join('');
+      }).join('');
     });
-    return newAcc;
-  }, [[]] as boolean[][]);
-
-  genotype2 = genotype2.reduce((acc, curr) => {
-    const [a, b] = curr as [boolean, boolean];
-    const newAcc: boolean[][] = [];
-    acc.forEach((el) => {
-      newAcc.push([...el, a]);
-      newAcc.push([...el, b]);
-    });
-    return newAcc;
-  }, [[]] as boolean[][]);
-  
-  return {
-    from: sub1.genes.map(x => x.from),
-    bilocus: [genotype1, genotype2]
   }
 }
 
 /* ===============    TESTING AREA     =============== */
 
 const gene1 = new Genotype({
-  alias: 'A',
+  alias: 'Y',
   description: 'This is a test gene',
   mortal: false,
   multiple: false
 });
 
 const gene2 = new Genotype({
-  alias: 'B',
+  alias: 'W',
   description: 'This is a test gene'
 });
 
@@ -163,8 +156,7 @@ const sub1 = new Subject({
   id: '1',
   genes: [
     { from: gene1, bilocus: [true, false] },
-    { from: gene2, bilocus: [true, false] },
-    { from: gene3, bilocus: [true, false]}
+    { from: gene2, bilocus: [true, false] }
   ]
 });
 
@@ -172,16 +164,15 @@ const sub2 = new Subject({
   id: '2',
   genes: [
     { from: gene1, bilocus: [true, false] },
-    { from: gene2, bilocus: [true, false] },
-    { from: gene3, bilocus: [true, false]}
+    { from: gene2, bilocus: [true, false] }
   ]
 });
 
-// console.log(res);
 const cross1 = new Cross(sub1, sub2);
-console.log(cross1.geneCross)
-console.log(cross1.geneCross)
+
+console.log(cross1.parsedGeneCrossTableEdge)
+console.log(cross1.parsedGeneCross)
 
 /* =============== END OF TESTING AREA =============== */
 
-export { Genotype, Subject, cross };
+export { Genotype, Subject, Cross, Phenotype };
