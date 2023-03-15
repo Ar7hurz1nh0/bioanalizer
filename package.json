@@ -16,7 +16,7 @@
   "repository": {
     "url": "https://github.com/lTimeless/vite-reactts-electron-starter"
   },
-  "productName": "vite-reactts-electron-starter",
+  "productName": "bioanalizer",
   "scripts": {
     "dev": "concurrently \"pnpm dev:vite\" \" pnpm dev:electron\"",
     "dev:vite": "vite",
@@ -36,6 +36,7 @@
     "electron-is-dev": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "ts-node": "^10.9.1",
     "vite": "^2.8.6"
   },
   "devDependencies": {

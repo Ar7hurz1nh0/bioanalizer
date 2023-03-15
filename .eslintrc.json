@@ -27,9 +27,12 @@
     "rules": {
         // Prettier
         "prettier/prettier": 0,
+        "camelcase": "off",
         // Typescript
         "no-use-before-define": "off",
+        "dot-notation": "off",
         "import/prefer-default-export": "warn",
+        "import/no-extraneous-dependencies": "off",
         // react
         "react/require-default-props": 0,
         "react/button-has-type": 0,

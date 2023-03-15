@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable camelcase */
 /* eslint-disable no-shadow */
@@ -11,7 +12,7 @@ const enum Phenotype {
 
 type bilocus = [boolean, boolean];
 type mortaldef = false | [Phenotype, Phenotype];
-type GeneCross = Gene[][];
+type GeneCross = Gene[][][];
 
 interface GeneCrossTableEdge {
   from: Genotype[];
@@ -101,14 +102,16 @@ class Cross {
       bilocus: [genotype1, genotype2]
     }
 
-    this.geneCross = genotype1.map((genotype1, index) => {
-      return genotype1.map((locus, index2) => {
-        return {
-          from: this.geneCrossTableEdge.from[index2],
-          bilocus: [locus, genotype2[index][index2]]
-        };
+    this.geneCross = genotype1.map((genotype1) => {
+      return genotype2.map((genotype2) => {
+        return genotype1.map((locus, index) => {
+          return {
+            from: subject1.genes[index]!.from,
+            bilocus: [locus, genotype2[index]!]
+          };
+        });
       });
-    }, []);
+    }, [[]] as Gene[][]);
   }
 
   get parsedGeneCrossTableEdge(): string[][] {
@@ -121,14 +124,15 @@ class Cross {
     });
   }
 
-  // TODO: this function is only returning the first line of the table, thus the error
   get parsedGeneCross(): string[][] {
-    return this.geneCross.map((genotype) => {
-      return genotype.map((bilocus) => {
-        return bilocus.bilocus.map((locus) => {
-          return locus ? bilocus.from.alias.toUpperCase() : bilocus.from.alias.toLowerCase();
+    return this.geneCross.map((genotype1) => {
+      return genotype1.map((genotype2) => {
+        return genotype2.map((gene) => {
+          return gene.bilocus.map((locus) => {
+            return locus ? gene.from.alias.toUpperCase() : gene.from.alias.toLowerCase();
+          }).join('');
         }).join('');
-      }).join('');
+      });
     });
   }
 }
@@ -147,11 +151,6 @@ const gene2 = new Genotype({
   description: 'This is a test gene'
 });
 
-const gene3 = new Genotype({
-  alias: 'C',
-  description: 'This is a test gene'
-})
-
 const sub1 = new Subject({
   id: '1',
   genes: [
@@ -164,7 +163,7 @@ const sub2 = new Subject({
   id: '2',
   genes: [
     { from: gene1, bilocus: [true, false] },
-    { from: gene2, bilocus: [true, false] }
+    { from: gene2, bilocus: [false, false] }
   ]
 });
 
