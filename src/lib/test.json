@@ -1,0 +1,544 @@
+{
+  "geneCross": [
+    [
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            true,
+            false
+          ]
+        }
+      ]
+    ],
+    [
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            true
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ],
+      [
+        {
+          "from": {
+            "alias": "Y",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        },
+        {
+          "from": {
+            "alias": "W",
+            "description": "This is a test gene",
+            "mortal": false,
+            "multiple": false
+          },
+          "locus": [
+            false,
+            false
+          ]
+        }
+      ]
+    ]
+  ],
+  "geneCrossTableEdge": {
+    "from": [
+      {
+        "alias": "Y",
+        "description": "This is a test gene",
+        "mortal": false,
+        "multiple": false
+      },
+      {
+        "alias": "W",
+        "description": "This is a test gene",
+        "mortal": false,
+        "multiple": false
+      }
+    ],
+    "bilocus": [
+      [
+        [
+          false,
+          true
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          true
+        ],
+        [
+          false,
+          false
+        ]
+      ],
+      [
+        [
+          true,
+          false
+        ],
+        [
+          true,
+          false
+        ],
+        [
+          false,
+          false
+        ],
+        [
+          false,
+          false
+        ]
+      ]
+    ]
+  },
+  "individualGeneCross": [
+    {
+      "from": {
+        "alias": "Y",
+        "description": "This is a test gene",
+        "mortal": false,
+        "multiple": false
+      },
+      "cross": [
+        [
+          [
+            true,
+            false
+          ],
+          [
+            true,
+            false
+          ]
+        ],
+        [
+          [
+            false,
+            false
+          ],
+          [
+            false,
+            false
+          ]
+        ]
+      ]
+    },
+    {
+      "from": {
+        "alias": "W",
+        "description": "This is a test gene",
+        "mortal": false,
+        "multiple": false
+      },
+      "cross": [
+        [
+          [
+            true,
+            false
+          ],
+          [
+            false,
+            false
+          ]
+        ],
+        [
+          [
+            true,
+            false
+          ],
+          [
+            false,
+            false
+          ]
+        ]
+      ]
+    }
+  ]
+}
