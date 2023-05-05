@@ -4,29 +4,51 @@
 /* eslint-disable no-shadow */
 /* eslint-disable lines-between-class-members */
 /* eslint-disable max-classes-per-file */
+
 const enum ErrorCode {
-  InvalidLocus = 'InvalidLocus',
-  InvalidGene = 'InvalidGene',
-  InvalidSubject = 'InvalidSubject',
-  GeneNotFound = 'GeneNotFound',
+  INVALID_LOCUS = 'InvalidLocus',
+  INVALID_GENE = 'InvalidGene',
+  INVALID_SUBJECT = 'InvalidSubject',
+  GENE_NOT_FOUND = 'GeneNotFound',
 }
 
 const enum Locus {
-  DOMINANT = '{homodominant}',
+  /** The equivalent to an "AA" allele, or
+   * ```
+   * [true, true]
+   * ```
+   */
+  HOMODOMINANT = '{homodominant}',
+  /** The equivalent to an "Aa" allele, or
+   * ```
+   * [true, false]
+   * ```
+   */
   HETERO = '{hetero}',
-  RECESSIVE = '{homorecessive}'
+  /** The equivalent to an "aa" allele, or
+   * ```
+   * [false, false]
+   * ```
+   */
+  HOMORECESSIVE = '{homorecessive}'
 }
 
 const enum Phenotype {
+  /** Represents a locus with at least one dominant allele */
   DOMINANT = '{dominant}',
+  /** Represents a locus with both alleles being recessive */
   RECESSIVE = '{recessive}'
 }
 
 type RawLocus = [boolean, boolean];
-type Bilocus = [ RawLocus, RawLocus ]
-type singleCrossBilocus = [ Bilocus, Bilocus ];
-type MortalDefinition = false | [ Phenotype, Phenotype ];
+type singleCrossBilocus = [ [ RawLocus, RawLocus ], [ RawLocus, RawLocus ] ];
+type MortalDefinition = false | IMortal;
 type GeneCross = GeneLocus[][][];
+
+interface IMortal {
+  fulfillment: Phenotype;
+  type: Phenotype;
+};
 
 interface ISingleCross {
   from: Gene;
@@ -49,14 +71,14 @@ interface MultiGene {
   mortal: MortalDefinition;
 }
 
-declare interface IGene {
+interface IGeneContructor {
   alias: string;
   description: string;
-  mortal: MortalDefinition;
-  multiple: false; // | MultiGene[];
+  multiple?: false;
+  mortal?: MortalDefinition;
 }
 
-type IGeneContructor = Omit<Omit<IGene, 'multiple'>, 'mortal'> & { multiple?: IGene["multiple"], mortal?: IGene["mortal"] };
+type IGene = Required<IGeneContructor>
 
 declare interface ISubject<GeneType extends RawLocus | Locus> {
   id: string;
@@ -64,21 +86,49 @@ declare interface ISubject<GeneType extends RawLocus | Locus> {
 }
 
 const locusSort = (locus: boolean): -1 | 0 => locus ? -1 : 0
-const genSeed = (rounds: number) => {
+const genSeed = (rounds: number): number => {
   let acc = 0;
   let i = 0;
   // eslint-disable-next-line no-plusplus
   for (; i <= rounds; i++) acc += Math.random() * 3;
   return acc / i;
 }
-const genId = () => genSeed(Math.random() * 100).toString(36).substring(2);
+const genId = (): string => genSeed(Math.random() * 100).toString(36).substring(2);
+
+function StdError(code: ErrorCode): Error {
+  switch (code) {
+    case ErrorCode.GENE_NOT_FOUND:
+      return new Error('Gene not found', { cause: ErrorCode.GENE_NOT_FOUND })
+    case ErrorCode.INVALID_GENE:
+      return new Error('')
+    case ErrorCode.INVALID_LOCUS:
+      return new Error('Invalid locus', { cause: ErrorCode.INVALID_LOCUS })
+    case ErrorCode.INVALID_SUBJECT:
+      return new Error('Invalid subject', { cause: ErrorCode.INVALID_SUBJECT })
+    default: return new Error('Generic error', { cause: 'unknown' })
+  }
+}
 
 class Gene implements Readonly<IGene> {
   readonly alias: string;
   readonly description: string;
   readonly mortal: MortalDefinition;
   readonly multiple: false; // | MultiGene[];
+  // TODO: ^^ Start code for handling Multi/Mortal genes
   readonly id: string;
+
+  public static EnumToRaw(locus: Locus): RawLocus {
+    switch (locus) {
+      case Locus.HETERO:
+        return [true, false]
+      case Locus.HOMODOMINANT:
+        return [true, true]
+      case Locus.HOMORECESSIVE:
+        return [false, false]
+      default:
+        throw StdError(ErrorCode.INVALID_LOCUS);
+    }
+  }
 
   constructor({ alias, description, mortal = false, multiple = false }: IGeneContructor) {
     this.alias = alias;
@@ -87,39 +137,78 @@ class Gene implements Readonly<IGene> {
     this.multiple = multiple;
     this.id = genId();
   }
+
+  // eslint-disable-next-line class-methods-use-this
+  public static isMortal({ from, locus }: GeneLocus<RawLocus | Locus>): boolean {
+    // eslint-disable-next-line no-param-reassign
+    if (Subject.isLocusEnum(locus)) locus = Gene.EnumToRaw(locus)
+    
+
+    return false
+  }
+
+  /**
+   * @param def Mortal gene definition
+   * @returns The usable format to a mortal gene interface
+   * @returns null if a invalid value is given
+   */
+  public static MortalToLocus(def: IMortal): RawLocus {
+    switch (def) {
+      case {
+        fulfillment: Phenotype.DOMINANT,
+        type: Phenotype.DOMINANT
+      }: return [true, false]
+
+      case {
+        fulfillment: Phenotype.DOMINANT,
+        type: Phenotype.RECESSIVE
+      }: return [true, false]
+
+      case {
+        fulfillment: Phenotype.RECESSIVE,
+        type: Phenotype.DOMINANT
+      }: return [true, true]
+
+      case {
+        fulfillment: Phenotype.RECESSIVE,
+        type: Phenotype.RECESSIVE
+      }: return [false, false]
+
+      default: return null as unknown as RawLocus
+    }
+  }
 }
 
 class Subject implements Readonly<ISubject<RawLocus | Locus>> {
   readonly id: string;
   readonly genes: GeneLocus<RawLocus>[];
 
-  private static isLocusEnum(genes: RawLocus | Locus): genes is Locus {
+  public static isLocusEnum(genes: RawLocus | Locus): genes is Locus {
     return !(genes instanceof Array) && typeof genes === 'string';
   }
 
   constructor({ genes }: Omit<ISubject<RawLocus | Locus>, 'id'>) {
     this.id = genId();
-    this.genes = genes.map(({ locus, from }) => {
-      if (Subject.isLocusEnum(locus)) switch (locus) {
-        case Locus.HETERO:
-          return { from, locus: [true, false] }
-  
-        case Locus.DOMINANT:
-          return { from, locus: [true, true] }
-  
-        case Locus.RECESSIVE:
-          return { from, locus: [false, false] }
-
-        default:
-          throw new Error('Invalid locus', { cause: ErrorCode.InvalidLocus });
-      }
-      else return { from, locus: locus.sort(locusSort) };
+    const genesMap = new Set<string>()
+    genes.forEach(({ from, locus }) => {
+      const rawlocus = Subject.isLocusEnum(locus)
+        ? { from, locus: Gene.EnumToRaw(locus)}
+        : { from, locus: locus.sort(locusSort) }
+      
+      if (genesMap.has(rawlocus.from.id)) throw StdError(ErrorCode.INVALID_SUBJECT)
+      else genesMap.add(rawlocus.from.id);
+    })
+    this.genes = Array.from(genesMap.values()).map((id): GeneLocus<RawLocus> => {
+      const { locus, from } = genes.find(gene => gene.from.id === id)!
+      if (Subject.isLocusEnum(locus))
+        return { from, locus: Gene.EnumToRaw(locus)}
+      return { from, locus: locus.sort(locusSort) };
     })
   }
 
-  public get parsedGenes() {
-    return this.genes.map((gene) => {
-      return gene.locus.map((locus) => {
+  public get parsedGenes(): string {
+    return this.genes.map((gene): string => {
+      return gene.locus.map((locus): string => {
         return locus ? gene.from.alias.toUpperCase() : gene.from.alias.toLowerCase();
       }).join('');
     }).join('');
@@ -141,7 +230,7 @@ class Cross {
 
     subject1.genes.forEach((gene) => {
       const gen2 = subject2.genes.findIndex(gen => gen.from === gene.from);
-      if (gen2 === -1) throw new Error('Gene not found', { cause: ErrorCode.GeneNotFound });
+      if (gen2 === -1) throw StdError(ErrorCode.GENE_NOT_FOUND);
       genotypeNames.push(gene.from);
       genotype1.push(gene.locus);
       genotype2.push(subject2.genes[gen2]!.locus);
@@ -240,7 +329,7 @@ class Cross {
       return acc + curr.map(genelocus => {
           const res: boolean[] = genelocus.map(gene => {
             const gen = subject.genes.find(g => g.from.id === gene.from.id)
-            if (!gen) throw new Error('Gene not found', { cause: ErrorCode.GeneNotFound });
+            if (!gen) throw StdError(ErrorCode.GENE_NOT_FOUND);
             return gene.locus.toString() === gen.locus.toString()
           })
           return Array(res.length).fill(true).toString() === res.toString()
@@ -250,10 +339,10 @@ class Cross {
     return {
       chance: occurencies/lenght,
       fraction: [occurencies, lenght],
-      parsedChance: Math.floor((occurencies/lenght)*10000)/100,
+      parsedChance: Math.round((occurencies/lenght)*10000)/100,
       occurencies
     }
   }
 }
 
-export { Gene, Subject, Cross, Phenotype, Locus };
+export { Gene, Subject, Cross, Phenotype, Locus, ErrorCode };

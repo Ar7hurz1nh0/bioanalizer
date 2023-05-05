@@ -5,14 +5,15 @@
 /* eslint-disable lines-between-class-members */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-console */
-import { Gene, Locus, Subject, Cross } from './genetic-builder';
-
-/* ===============    TESTING AREA     =============== */
-
+import { Gene, Locus, Subject, Cross, Phenotype } from './genetic-builder';
 
 const gene1 = new Gene({
   alias: 'Y',
   description: 'This is a test gene',
+  mortal: {
+    fulfillment: Phenotype.DOMINANT,
+    type: Phenotype.RECESSIVE
+  }
 });
 
 const gene2 = new Gene({
@@ -23,8 +24,8 @@ const gene2 = new Gene({
 const sub1 = new Subject({
   genes: [
     { from: gene1, locus: Locus.HETERO },
-    { from: gene2, locus: Locus.HETERO },
-  ]
+    { from: gene2, locus: Locus.HOMODOMINANT },
+  ],
 });
 
 const sub2 = new Subject({
@@ -48,6 +49,5 @@ console.log(cross1.chanceOf(sub3))
 
 console.log(sub1.id)
 const parsedGeneCross = cross1.parsedGeneCross.flat();
+console.log(parsedGeneCross.toString())
 console.log('Has chance', parsedGeneCross.includes(sub3.parsedGenes), '|', parsedGeneCross.filter(gene => gene === sub3.parsedGenes).length, 'out of', parsedGeneCross.length)
-
-/* =============== END OF TESTING AREA =============== */
